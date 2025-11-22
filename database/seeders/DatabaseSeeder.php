@@ -11,15 +11,13 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // Jalankan seeder produk
+        // Jalankan seeder produk + admin
         $this->call([
             ProductSeeder::class,
+            AdminSeeder::class, // ← Tambahkan ini
         ]);
+        
 
-        // Hapus seeding user karena kamu tidak pakai tabel users
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        
     }
 }

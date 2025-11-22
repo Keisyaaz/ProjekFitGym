@@ -14,7 +14,7 @@ class ProdukFactory extends Factory
             'Kategori_produk' => $this->faker->randomElement(['Kaos', 'Hoodie', 'Celana', 'Aksesoris']),
             'Varian_produk' => $this->faker->randomElement(['S', 'M', 'L', 'XL']),
             'Harga' => $this->faker->numberBetween(50000, 200000),
-            'gambar' => 'default.jpg',
+            'gambar' => $this->faker->imageUrl(400, 400, 'clothes'), // <-- gambar placeholder unik
         ];
     }
 }

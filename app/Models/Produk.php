@@ -19,5 +19,13 @@ class Produk extends Model
         'Harga',
         'gambar',
     ];
+    
+    public function carts()
+{
+    return $this->hasMany(Cart::class);
 }
+
+}
+
+
 

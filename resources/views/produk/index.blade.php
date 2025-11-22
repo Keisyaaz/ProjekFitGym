@@ -1,152 +1,105 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding: 20px;
-            color: #333;
-        }
+@extends('layouts.admin')
 
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
+@section('title', 'Daftar Produk')
 
-        a {
-            text-decoration: none;
-            color: #3498db;
-            margin-right: 10px;
-        }
+@section('content')
 
-        a:hover {
-            text-decoration: underline;
-            color: #2980b9;
-        }
+<style>
+    .container-table {
+        max-width: 1400px; /* Lebar lebih besar */
+        margin: 20px auto;
+        background: #fff;
+        padding: 25px 40px; /* Sedikit lebih luas */
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    .btn {
+        padding: 8px 15px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
 
-        th {
-            background-color: #2c3e50;
-            color: white;
-        }
+    .btn-primary { background: #007bff; color: #fff; }
+    .btn-warning { background: #ffc107; color: #fff; }
+    .btn-danger { background: #dc3545; color: #fff; }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+    .btn:hover { opacity: 0.8; }
 
-        img {
-            border-radius: 5px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; /* Kolom lebih rapi */
+    }
 
-        td a {
-            margin-right: 8px;
-            font-weight: bold;
-        }
+    th, td {
+        padding: 12px; /* Lebih lega */
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 14px;
+        word-wrap: break-word;
+    }
 
-        td a:hover {
-            color: #e74c3c;
-        }
+    th { background: #f2f2f2; }
 
-        .actions {
-            margin-bottom: 20px;
-        }
+    img {
+        max-width: 100px; /* Lebih besar */
+        border-radius: 6px;
+    }
 
-        .actions a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #2979FF;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+    form.d-inline { display: inline-block; }
+</style>
+<div class="container-table">
+    <h2>Daftar Produk</h2>
 
-        .actions a:hover {
-            background-color: #1a5ed9;
-        }
+    <a href="{{ route('produk.create') }}" class="btn btn-primary">Tambah Produk</a>
 
-        form {
-            display: inline;
-        }
-
-        button.delete-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button.delete-btn:hover {
-            background-color: darkred;
-        }
-    </style>
-</head>
-<body>
-
-<h2>Dashboard Produk</h2>
-
-<div class="actions">
-    <a href="{{ route('produk.create') }}">+ Tambah Produk</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th>Kategori</th>
+                <th>Varian</th>
+                <th>Harga</th>
+                <th>Gambar</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($produk as $item)
+                <tr>
+                    <td>{{ $item->Nama_produk }}</td>
+                    <td>{{ $item->Deskripsi_produk }}</td>
+                    <td>{{ $item->Kategori_produk }}</td>
+                    <td>{{ $item->Varian_produk }}</td>
+                    <td>{{ $item->Harga }}</td>
+                    <td>
+                        @if($item->gambar)
+                            <img src="{{ asset('storage/'.$item->gambar) }}" alt="Gambar Produk">
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('produk.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('produk.destroy', $item->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
-<table>
-    <tr>
-        <th>No</th>
-        <th>Nama</th>
-        <th>Deskripsi</th>
-        <th>Kategori</th>
-        <th>Varian</th>
-        <th>Harga</th>
-        <th>Gambar</th>
-        <th>Aksi</th>
-    </tr>
-
-    @foreach($produk as $no => $item)
-    <tr>
-        <td>{{ $no + 1 }}</td>
-        <td>{{ $item->Nama_produk }}</td>
-        <td>{{ $item->Deskripsi_produk }}</td>
-        <td>{{ $item->Kategori_produk }}</td>
-        <td>{{ $item->Varian_produk }}</td>
-        <td>Rp{{ number_format($item->Harga, 0, ',', '.') }}</td>
-        <td>
-            @if ($item->gambar)
-                <img src="{{ asset('storage/' . $item->gambar) }}" width="100" alt="Gambar Produk">
-            @else
-                (Tidak ada gambar)
-            @endif
-        </td>
-        <td>
-            <a href="{{ route('produk.edit', $item->id) }}">Edit</a> |
-
-            <form action="{{ route('produk.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin hapus produk ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="delete-btn">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</table>
-
-</body>
-</html>
+@endsection

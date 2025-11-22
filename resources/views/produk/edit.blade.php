@@ -71,26 +71,26 @@
 
     <h2>Edit Produk</h2>
 
-    <label for="nama">Nama Produk</label>
-    <input name="nama" id="nama" value="{{ $produk->Nama_produk }}" required>
+    <label for="Nama_produk">Nama Produk</label>
+    <input type="text" name="Nama_produk" id="Nama_produk" value="{{ $produk->Nama_produk }}" required>
 
-    <label for="deskripsi">Deskripsi</label>
-    <textarea name="deskripsi" id="deskripsi">{{ $produk->Deskripsi_produk }}</textarea>
+    <label for="Deskripsi_produk">Deskripsi</label>
+    <textarea name="Deskripsi_produk" id="Deskripsi_produk">{{ $produk->Deskripsi_produk }}</textarea>
 
-    <label for="kategori">Kategori</label>
-    <textarea name="kategori" id="kategori">{{ $produk->Kategori_produk }}</textarea>
+    <label for="Kategori_produk">Kategori</label>
+    <textarea name="Kategori_produk" id="Kategori_produk">{{ $produk->Kategori_produk }}</textarea>
 
-    <label for="varian">Varian</label>
-    <input name="varian" id="varian" value="{{ $produk->Varian_produk }}" required>
+    <label for="Varian_produk">Varian</label>
+    <input type="text" name="Varian_produk" id="Varian_produk" value="{{ $produk->Varian_produk }}" required>
 
-    <label for="harga">Harga</label>
-    <input type="number" name="harga" id="harga" value="{{ $produk->Harga }}" required>
+    <label for="Harga">Harga</label>
+    <input type="number" name="Harga" id="Harga" value="{{ $produk->Harga }}" required>
 
     <label for="gambar">Gambar Baru (Opsional)</label>
     <input type="file" name="gambar" id="gambar" accept=".png,.jpg,.jpeg">
 
     @if ($produk->gambar)
-        <img src="{{ asset('uploads/' . $produk->gambar) }}" width="100" alt="Gambar Produk">
+        <img src="{{ asset('storage/' . $produk->gambar) }}" width="100" alt="Gambar Produk">
     @endif
 
     <button type="submit">Update</button>

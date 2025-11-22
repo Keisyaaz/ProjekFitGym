@@ -8,13 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pelanggan', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('phone');
+            $table->string('name');
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
             $table->string('address')->nullable();
-            $table->string('username')->unique();
+            $table->string('username')->unique()->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'customer'])->default('customer');
             $table->enum('status_membership', ['aktif', 'nonaktif'])->default('nonaktif');

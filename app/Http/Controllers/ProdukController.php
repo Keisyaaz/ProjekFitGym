@@ -8,25 +8,28 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
+    // Tampilkan semua produk
     public function index()
     {
         $produk = Produk::all();
         return view('produk.index', compact('produk'));
     }
 
+    // Tampilkan form tambah produk
     public function create()
     {
         return view('produk.create');
     }
 
+    // Simpan produk baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'kategori' => 'nullable|string',
-            'varian' => 'required|string',
-            'harga' => 'required|numeric',
+            'Nama_produk' => 'required|string|max:255',
+            'Deskripsi_produk' => 'nullable|string',
+            'Kategori_produk' => 'nullable|string',
+            'Varian_produk' => 'required|string',
+            'Harga' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -36,30 +39,32 @@ class ProdukController extends Controller
         }
 
         Produk::create([
-            'Nama_produk' => $validated['nama'],
-            'Deskripsi_produk' => $validated['deskripsi'],
-            'Kategori_produk' => $validated['kategori'],
-            'Varian_produk' => $validated['varian'],
-            'Harga' => $validated['harga'],
+            'Nama_produk' => $validated['Nama_produk'],
+            'Deskripsi_produk' => $validated['Deskripsi_produk'],
+            'Kategori_produk' => $validated['Kategori_produk'],
+            'Varian_produk' => $validated['Varian_produk'],
+            'Harga' => $validated['Harga'],
             'gambar' => $gambarPath,
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
+    // Tampilkan form edit produk
     public function edit(Produk $produk)
     {
         return view('produk.edit', compact('produk'));
     }
 
+    // Update produk
     public function update(Request $request, Produk $produk)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'kategori' => 'nullable|string',
-            'varian' => 'required|string',
-            'harga' => 'required|numeric',
+            'Nama_produk' => 'required|string|max:255',
+            'Deskripsi_produk' => 'nullable|string',
+            'Kategori_produk' => 'nullable|string',
+            'Varian_produk' => 'required|string',
+            'Harga' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -68,22 +73,17 @@ class ProdukController extends Controller
             if ($produk->gambar) {
                 Storage::disk('public')->delete($produk->gambar);
             }
-            // Simpan gambar baru
-            $produk->gambar = $request->file('gambar')->store('produk', 'public');
+            $validated['gambar'] = $request->file('gambar')->store('produk', 'public');
+        } else {
+            $validated['gambar'] = $produk->gambar; // pertahankan gambar lama
         }
 
-        $produk->update([
-            'Nama_produk' => $validated['nama'],
-            'Deskripsi_produk' => $validated['deskripsi'],
-            'Kategori_produk' => $validated['kategori'],
-            'Varian_produk' => $validated['varian'],
-            'Harga' => $validated['harga'],
-            'gambar' => $produk->gambar,
-        ]);
+        $produk->update($validated);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
+    // Hapus produk
     public function destroy(Produk $produk)
     {
         if ($produk->gambar) {
@@ -92,5 +92,11 @@ class ProdukController extends Controller
         $produk->delete();
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus!');
+    }
+
+    // Tampilkan detail produk (opsional)
+    public function show(Produk $produk)
+    {
+        return view('produk.show', compact('produk'));
     }
 }
