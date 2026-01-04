@@ -1,142 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'FitGym')</title>
+@extends('layouts.guest')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@section('title', 'Register FitGym')
 
-    <style>
-       /* --- Global Styles --- */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    /* Background Gradient */
-    background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
-    background-size: 200% 200%;
-    animation: gradientBG 15s ease infinite;
-    min-height: 100vh;
-    margin: 0;
-}
+@section('content')
+<div class="register-wrapper">
+    <div class="register-container">
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        <div class="header-title">
+            <h2>Register</h2>
+            <p style="opacity: 0.8; font-size: 14px;">Create your account</p>
+        </div>
 
-/* --- Container & Layout --- */
-.register-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-.register-container {
-    /* Efek Glassmorphism (Kaca) */
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 40px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 450px;
-    color: #555;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-}
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-/* --- Header Text --- */
-.header-title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="name" class="form-control"
+                       placeholder="Full Name" value="{{ old('name') }}" required>
+            </div>
 
-.header-title h2 {
-    font-weight: 600;
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                <input type="text" name="username" class="form-control"
+                       placeholder="Username" value="{{ old('username') }}" required>
+            </div>
 
-/* --- Form Inputs --- */
-.input-group {
-    margin-bottom: 20px;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" class="form-control"
+                       placeholder="Email Address" value="{{ old('email') }}" required>
+            </div>
 
-.input-group-text {
-    background: white;
-    border: none;
-    color: #2d7a92; /* Warna Teal */
-    padding-left: 15px;
-    width: 45px;
-    justify-content: center;
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="text" name="phone" class="form-control"
+                       placeholder="Phone Number" value="{{ old('phone') }}" required>
+            </div>
 
-.form-control {
-    border: none;
-    height: 50px;
-    padding-left: 10px;
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password" class="form-control"
+                       placeholder="Password" required>
+            </div>
 
-.form-control:focus {
-    box-shadow: none;
-}
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                <input type="password" name="password_confirmation" class="form-control"
+                       placeholder="Confirm Password" required>
+            </div>
 
-/* --- Buttons --- */
-.btn-register {
-    background-color: #2d7a92;
-    border: none;
-    color: white;
-    width: 100%;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: 0.3s;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
+            <button type="submit" class="btn btn-register">REGISTER</button>
+        </form>
 
-.btn-register:hover {
-    background-color: #246073;
-    transform: translateY(-2px);
-}
+        <div class="footer-link">
+            Already have an account?
+            <a href="{{ route('login') }}">Login Here</a>
+        </div>
 
-/* --- Links & Footer --- */
-.footer-link {
-    text-align: center;
-    margin-top: 25px;
-    font-size: 14px;
-    color: white;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    padding-top: 15px;
-}
-
-.footer-link a {
-    color: #fff;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/* --- Alerts --- */
-.alert-danger {
-    background-color: rgba(220, 53, 69, 0.9);
-    border: none;
-    color: white;
-    font-size: 13px;
-    border-radius: 10px;
-}
-    </style>
-</head>
-<body>
-
-    @yield('content')
-
-</body>
-</html>
+    </div>
+</div>
+@endsection
